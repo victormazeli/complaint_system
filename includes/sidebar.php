@@ -20,6 +20,9 @@
                             <li class="nav-item ">
                                 <a class="nav-link" href="complaint_history.php"  aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>Complaint History</a>
                             </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="usage_calculator.php"  aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>Usage Calculator</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fas fa-fw fa-cogs"></i>Account Settings</a>
                                 <div id="submenu-5" class="collapse submenu" style="">
