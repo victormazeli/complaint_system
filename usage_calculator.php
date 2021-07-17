@@ -1,5 +1,7 @@
 <?php 
 include ('includes/session.php');
+$myVat = "SELECT * FROM tariff WHERE status =1";
+$myVat = mysqli_query($conn, $myVat);
 
 if(isset($_POST['submit'])) {
     $itemByWatt = 0;
@@ -25,12 +27,17 @@ if(isset($_POST['submit'])) {
     if($data=mysqli_fetch_array($run_query))
     {
         $vat = $data['vat'];
-        $totalCost = $monthlyConsumption * $data['unit_price'];
+        $totalCost = $monthlyConsumption * $_SESSION['tariff'];
         echo "<script>
             window.alert('Estimated cost = N$totalCost || VAT = N$vat');
             window.history.back();
         </script>";
     }
+}
+if (isset($_GET['tariff']))
+{
+    $_SESSION["tariff"] = $_GET['tariff'];
+    //$_SESSION["tariff_name"] = $_GET['tariff_name'];
 }
 ?>
 
@@ -81,7 +88,7 @@ if(isset($_POST['submit'])) {
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header" id="top">
-                <h2 class="pageheader-title">Usage Calculator </h2>
+                <h2 class="pageheader-title">Usage Calculator || N<?=$_SESSION['tariff']?></h2>
             </div>
         </div>
     </div>                  
@@ -119,6 +126,7 @@ if(isset($_POST['submit'])) {
                                         <input type="number" placeholder="number of this appliance in use" class="form-control" name="unit[]" required="" >
                                     </div>
                                 </div>
+                                <input type="hidden" name="submit" value="1">
                                 <a href="#" id="remove"><i class="fa fa-minus-square">Remove</i></a>
                             </div>
                             <hr>
@@ -127,6 +135,7 @@ if(isset($_POST['submit'])) {
 
                     <div class="form-group row text-right">
                         <div class="col col-sm-10 col-lg-9 offset-sm-1 offset-lg-0">
+                            <button type="button" class="btn btn-space btn-warning" data-toggle="modal" data-target="#myModal"><i class="fa fa-recycle">Change tariff</i></button>
                             <button type="button" class="btn btn-space btn-success" id="add-new"><i class="fa fa-plus-square">Add Item</i></button>
                             <button type="submit" class="btn btn-space btn-primary" name="submit">Submit</button>
                         </div>
@@ -153,10 +162,58 @@ if(isset($_POST['submit'])) {
             <!-- ============================================================== -->
         </div>
     </div>
+    <!-- The Modal -->
+    <div class="modal <?php echo (isset($_SESSION['tariff']))? "fade": ""?> hide" id="myModal" role="dialog" <?php echo(!isset($_SESSION['tariff']))? "data-backdrop='static' data-keyboard='false'":"";?>>
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="" method="get">
+                <div class="modal-header">
+                    <?php
+                    if (isset($_SESSION['tariff']))
+                    {
+                    ?>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <?php
+                    }
+                    ?>
+                    <h4 class="modal-title">Select Tariff</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select name="tariff" id="" class="form-control" required>
+                            <option value="">--select tariff--</option>
+                            <?php
+                            while($v = mysqli_fetch_assoc($myVat)) {
+                            ?>
+                            <option value="<?=$v['rate']?>"><?=$v['name']?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <?php
+                    if (isset($_SESSION['tariff']))
+                    {
+                    ?>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <?php
+                    }
+                    ?>
+                </div>
+                </form>
+            </div>
+
+        </div>
     <!-- ============================================================== -->
     <!-- end main wrapper -->
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
+
     <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="assets/vendor/slimscroll/jquery.slimscroll.js"></script>
@@ -197,16 +254,25 @@ if(isset($_POST['submit'])) {
                     "                        </div>"
                 $("#addition").append(html)
             })
-            /*$("#remove").click(function () {
-                console.log(this)
-                $(this).closest("#added-row").remove()
-            })*/
+
             // remove row
             $(document).on('click', '#remove', function () {
                 $(this).closest('#added-row').remove();
             });
         })
     </script>
+        <?php
+        if (!isset($_SESSION['tariff']))
+        {
+            ?>
+            <script type="text/javascript">
+                $(window).on('load', function() {
+                    $('#myModal').modal('show');
+                });
+            </script>
+            <?php
+        }
+        ?>
 </body>
 
 </html>
