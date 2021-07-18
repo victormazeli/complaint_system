@@ -37,7 +37,6 @@ if(isset($_POST['submit'])) {
 if (isset($_GET['tariff']))
 {
     $_SESSION["tariff"] = $_GET['tariff'];
-    //$_SESSION["tariff_name"] = $_GET['tariff_name'];
 }
 ?>
 
