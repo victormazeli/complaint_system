@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 14, 2021 at 02:40 PM
+-- Generation Time: Jul 17, 2021 at 11:20 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.4.9
 
@@ -433,6 +433,33 @@ CREATE TABLE IF NOT EXISTS `service_center` (
 INSERT INTO `service_center` (`sc_id`, `name`, `username`, `password`, `email`, `tel_number`, `address`, `local_govt`, `date_created`, `date_modified`) VALUES
 (3, 'Bosso Service Centre', 'sc01', 'admin', 'bossosc@yahoo.com', '08151531788', 'Okada Road, Bosso', 'Bosso', '2019-11-13 08:34:15', '2019-11-18 11:24:46'),
 (4, 'Chanchaga Service Centre', 'sc02', 'admin', 'Chanchagasc@yahoo.com', '08136985245', 'Chanchaga, Minna', 'Chanchaga', '2019-11-13 08:35:03', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tariff`
+--
+
+DROP TABLE IF EXISTS `tariff`;
+CREATE TABLE IF NOT EXISTS `tariff` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `rate` varchar(50) NOT NULL,
+  `vat` int(11) NOT NULL DEFAULT '10',
+  `status` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tariff`
+--
+
+INSERT INTO `tariff` (`id`, `name`, `rate`, `vat`, `status`) VALUES
+(1, 'R1', '4', 10, 1),
+(2, 'R2s', '21', 10, 1),
+(3, 'R2T', '23', 10, 1),
+(4, 'R4', '32', 10, 1),
+(5, 'R4', '30', 10, 1);
 
 --
 -- Constraints for dumped tables
