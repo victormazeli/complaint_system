@@ -56,9 +56,9 @@
 
                         <div class="form-group row text-left">
                             <div class="col col-sm-10 col-lg-9 offset-sm-1 offset-lg-0">
-                     <button type="submit" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_disco" >Add New  <i class="fa fa-plus-circle"></i> </button>
-
-                            </div>                          
+                                <button type="submit" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_disco" >Add New  <i class="fa fa-plus-circle"></i> </button>
+                                <a href="assign_complaint.php" class="btn btn-success btn-sm">Assign Complaint  <i class="fa fa-plus-square"></i> </a>
+                            </div>
                         </div>
 
                 <!-- ============================================================== -->

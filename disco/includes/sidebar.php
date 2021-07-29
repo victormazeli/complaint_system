@@ -16,8 +16,11 @@
                             <li class="nav-item ">
                                 <a class="nav-link active" href="dashboard.php" data-toggle="" aria-expanded="false" data-target="" aria-controls=""><i class="fa fa-fw fa-user-circle"></i>Dashboard<span class=""></span></a>
                             </li>
-                              <li class="nav-item">
+                            <li class="nav-item">
                                 <a class="nav-link" href="manage_service_center.php" data-toggle="" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-users"></i>Manage Service Center</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="manage_tariff_plan.php" data-toggle="" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-clock"></i>Manage Tariff Plan</a>
                             </li>
 
                             <li class="nav-item">
