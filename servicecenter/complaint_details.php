@@ -183,7 +183,11 @@ while($rw=mysqli_fetch_array($cqq))
 
 												echo "Complaint Already Closed, You Cant't Perform Any Action!";
 
-												} else {?>
+												} else {
+											    $home = $_SERVER['SERVER_NAME'];
+											    $port = $_SERVER['SERVER_PORT'];
+											    $full =$home . ($port != '80')?$port:'';
+											    ?>
 <a href="javascript:void(0);" onClick="popUpWindow('http://localhost/project/servicecenter/update_complaint.php?cid=<?php echo htmlentities($row['complaint_id']);?>');" title="Update order">
 											 <button type="button" class="btn btn-primary">Take Action</button></td>
 											</a><?php } ?></td></tr>
