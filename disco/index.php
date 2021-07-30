@@ -75,7 +75,7 @@ exit();
                 <i class="fa fa-user-secret"></i>
                 <span class="splash-description">Please enter your admin information.</span></div>
             <div class="card-body">
-                <form action="index.php" method="POST">
+                <form action="" method="POST">
                      <span style="color:red;" ><?php echo htmlentities($_SESSION['errmsg']); ?><?php echo htmlentities($_SESSION['errmsg']="");?></span>
                     <span style="color:green;" ><?php echo htmlentities($_SESSION['succmsg']); ?><?php echo htmlentities($_SESSION['succmsg']="");?></span>
                     <br>
