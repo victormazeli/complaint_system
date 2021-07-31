@@ -348,5 +348,4 @@ if (isset($_GET['tariff']))
         }
         ?>
 </body>
-
 </html>
