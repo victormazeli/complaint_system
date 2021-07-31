@@ -232,20 +232,29 @@ if (isset($_GET['tariff']))
     <script>
         $(function(){
             $("#add-new").click(function(){
+                var add = ""
+                <?php
+                $query = "SELECT * FROM appliances";
+                $app = mysqli_query($conn, $query);
+                while ($a = mysqli_fetch_assoc($app)):
+                ?>
+                var add = add + "<option value=\"<?=$a['id']?>\" data-watt=\"<?=$a['max_watt']?>\">\n" +
+                    "                    <?=$a['name']?> || <?=$a['max_watt']?>watt\n" +
+                    "                    </option>"
+                <?php
+                endwhile;
+                ?>
+                var add = add + "</select>\n" +
+                    "                    </div>\n" +
+                    "                    </div>"
+
                 var html = "<div id=\"added-row\">\n" +
-                    "                            <div class=\"row\">\n" +
-                    "                                <div class=\"col\">\n" +
-                    "                                    <div class=\"form-group\">\n" +
-                    "                                        <label class=\"text-sm-right\">Name</label>\n" +
-                    "                                        <input type=\"text\"  maxlength=\"40\" placeholder=\"Enter appliance name\" class=\"form-control\" name=\"name[]\" required=\"\" >\n" +
-                    "                                    </div>\n" +
-                    "                                </div>\n" +
-                    "                                <div class=\"col\">\n" +
-                    "                                    <div class=\"form-group\">\n" +
-                    "                                        <label class=\"text-sm-right\">Watt</label>\n" +
-                    "                                        <input type=\"number\" placeholder=\"enter the wattage\" class=\"form-control\" name=\"watt[]\" required=\"\" >\n" +
-                    "                                    </div>\n" +
-                    "                                </div>\n" +
+                        "<div class='row'>\n"+
+                    "                            <div class=\"col\">\n" +
+                    "                    <div class=\"form-group\">\n" +
+                    "                    <label class=\"text-sm-right\">Name</label>\n" +
+                    "                    <select name=\"name[]\" id=\"watt_name\" class=\"form-control\" required>\n" +
+                    "                <option value=\"\">--select appliance name--</option>" + add +
                     "                                <div class=\"col\">\n" +
                     "                                    <div class=\"form-group\">\n" +
                     "                                        <label class=\"text-sm-right\">Usage (hour)</label>\n" +
@@ -262,6 +271,7 @@ if (isset($_GET['tariff']))
                     "                            </div>\n" +
                     "                            <hr>\n" +
                     "                        </div>"
+                +"</div>"
                 $("#addition").append(html)
             })
 

@@ -335,48 +335,6 @@ if (isset($_GET['tariff']))
     <script src="assets/vendor/slimscroll/jquery.slimscroll.js"></script>
     <script src="assets/libs/js/main-js.js"></script>
     <script src="assets/vendor/inputmask/js/jquery.inputmask.bundle.js"></script>
-    <script>
-        $(function(){
-            $("#add-new").click(function(){
-                var html = "<div id=\"added-row\">\n" +
-                    "                            <div class=\"row\">\n" +
-                    "                                <div class=\"col\">\n" +
-                    "                                    <div class=\"form-group\">\n" +
-                    "                                        <label class=\"text-sm-right\">Name</label>\n" +
-                    "                                        <input type=\"text\"  maxlength=\"40\" placeholder=\"Enter appliance name\" class=\"form-control\" name=\"name[]\" required=\"\" >\n" +
-                    "                                    </div>\n" +
-                    "                                </div>\n" +
-                    "                                <div class=\"col\">\n" +
-                    "                                    <div class=\"form-group\">\n" +
-                    "                                        <label class=\"text-sm-right\">Watt</label>\n" +
-                    "                                        <input type=\"number\" placeholder=\"enter the wattage\" class=\"form-control\" name=\"watt[]\" required=\"\" >\n" +
-                    "                                    </div>\n" +
-                    "                                </div>\n" +
-                    "                                <div class=\"col\">\n" +
-                    "                                    <div class=\"form-group\">\n" +
-                    "                                        <label class=\"text-sm-right\">Usage (hour)</label>\n" +
-                    "                                        <input type=\"number\" placeholder=\"How many hours a day is it in use?\" class=\"form-control\" name=\"usage[]\" required=\"\" >\n" +
-                    "                                    </div>\n" +
-                    "                                </div>\n" +
-                    "                                <div class=\"col\">\n" +
-                    "                                    <div class=\"form-group\">\n" +
-                    "                                        <label class=\"text-sm-right\">Units</label>\n" +
-                    "                                        <input type=\"number\" placeholder=\"number of this appliance in use\" class=\"form-control\" name=\"unit[]\" required=\"\" >\n" +
-                    "                                    </div>\n" +
-                    "                                </div>\n" +
-                    "                                <a href=\"#\" id=\"remove\"><i class=\"fa fa-minus-square\">Remove</i></a>\n" +
-                    "                            </div>\n" +
-                    "                            <hr>\n" +
-                    "                        </div>"
-                $("#addition").append(html)
-            })
-
-            // remove row
-            $(document).on('click', '#remove', function () {
-                $(this).closest('#added-row').remove();
-            });
-        })
-    </script>
         <?php
         if (!isset($_SESSION['tariff']))
         {
