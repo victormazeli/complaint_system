@@ -2,42 +2,6 @@
 include ('includes/session.php');
 $myVat = "SELECT * FROM tariff WHERE status =1";
 $myVat = mysqli_query($conn, $myVat);
-
-if(isset($_POST['submit'])) {
-    $itemByWatt = 0;
-    for ($x = 0; $x <= count($_POST['name'])-1; $x++) {
-        /**
-         * multiply the wattage by the application unit for each
-         * then multiply by the number of hours the appliance was on
-         */
-        $name = $_POST['name'][$x];
-        $query = "SELECT * FROM appliances WHERE id = '$name'";
-        $app = mysqli_fetch_assoc(mysqli_query($conn, $query));
-
-        $itemByWatt = $itemByWatt + (($_POST['unit'][$x] * $app['max_watt']) * $_POST['usage'][$x]);
-    }
-
-    /**
-     * go ahead to multiply the itemByWatt by 30 to het the monthly consumption
-     */
-    $monthlyConsumption = $itemByWatt * 30;
-
-    /**
-     * get the unit price and vat
-     */
-
-    $query = "SELECT * FROM company_policy WHERE `status`=1";
-    $run_query = mysqli_query($conn, $query);
-    if($data=mysqli_fetch_array($run_query))
-    {
-        $vat = $data['vat'];
-        $totalCost = $monthlyConsumption * $_SESSION['tariff'];
-        echo "<script>
-            window.alert('Estimated cost = N$totalCost || VAT = N$vat');
-            window.history.back();
-        </script>";
-    }
-}
 if (isset($_GET['tariff']))
 {
     $_SESSION["tariff"] = $_GET['tariff'];
@@ -60,6 +24,61 @@ if (isset($_GET['tariff']))
     <link rel="stylesheet" href="assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="assets/vendor/datepicker/tempusdominus-bootstrap-4.css" />
     <link rel="stylesheet" href="assets/vendor/inputmask/css/inputmask.css" />
+    <style>
+        table {
+            width: 100%;
+
+        }
+
+        th 	{
+            background-color: #2196F3;
+            color: white;
+            padding: 8px;
+        }
+        td 	{
+            padding: 8px;
+        }
+
+        tr:nth-child(even){
+            background-color: #f2f2f2
+        }
+
+        #icon {
+            padding-bottom: 10px;
+        }
+
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 100%
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* On small screens, set height to 'auto' for the grid */
+        @media screen and (max-width: 767px) {
+            .row.content {
+                height: auto;
+            }
+        }
+
+        .labels tr td {
+            background-color: #90CAF9;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        label{
+            cursor: pointer;
+        }
+
+        [data-toggle="toggle"] {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -91,7 +110,7 @@ if (isset($_GET['tariff']))
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header" id="top">
-                <h2 class="pageheader-title">Usage Calculator || N<?=$_SESSION['tariff']?></h2>
+                <h2 class="pageheader-title">Usage Calculated || N<?=$_SESSION['tariff']?></h2>
             </div>
         </div>
     </div>                  
@@ -99,58 +118,145 @@ if (isset($_GET['tariff']))
 
  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card">
-            <h5 class="card-header">Fill the form below to register your complaints</h5>
+            <h5 class="card-header">Calculated bill</h5>
             <div class="card-body">
-                <form id="" method="POST" action="calculated.php">
-                    <div id="addition">
-                        <div id="added-row">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label class="text-sm-right">Name</label>
-                                        <select name="name[]" id="watt_name" class="form-control" required>
-                                            <option value="">--select appliance name--</option>
-                                            <?php
-                                            $query = "SELECT * FROM appliances";
-                                            $app = mysqli_query($conn, $query);
-                                            while ($a = mysqli_fetch_assoc($app)):
-                                            ?>
-                                            <option value="<?=$a['id']?>" data-watt="<?=$a['max_watt']?>">
-                                                <?=$a['name']?> || <?=$a['max_watt']?>watt
-                                            </option>
-                                            <?php
-                                            endwhile;
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label class="text-sm-right">Usage (hour)</label>
-                                        <input type="number" placeholder="How many hours a day is it in use?" class="form-control" name="usage[]" required="" max="24">
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label class="text-sm-right">Units</label>
-                                        <input type="number" placeholder="number of this appliance in use" class="form-control" name="unit[]" required="" >
-                                    </div>
-                                </div>
-                                <input type="hidden" name="submit" value="1">
-                                <a href="#" id="remove"><i class="fa fa-minus-square">Remove</i></a>
-                            </div>
-                            <hr>
-                        </div>
-                    </div>
+                <section class="page_loop">
+                    <!--content here-->
+                    <table cellpadding="0" cellspacing="2" border="1" class="calculator" width="100%">
 
-                    <div class="form-group row text-right">
-                        <div class="col col-sm-10 col-lg-9 offset-sm-1 offset-lg-0">
-                            <button type="button" class="btn btn-space btn-warning" data-toggle="modal" data-target="#myModal"><i class="fa fa-recycle">Change tariff</i></button>
-                            <button type="button" class="btn btn-space btn-success" id="add-new"><i class="fa fa-plus-square">Add Item</i></button>
-                            <button type="submit" class="btn btn-space btn-primary" name="submit">Submit</button>
-                        </div>
-                    </div>
-                </form>
+                        <tbody><tr>
+                            <th>
+                                Appliance
+                            </th>
+                            <th>
+                                Standard Load (WATTS)
+                            </th>
+                            <th valign="middle" align="center">
+                                Average Daily Consumption(Hours/Day)
+                            </th>
+                            <th>
+                                &nbsp;
+                            </th>
+                            <th valign="middle" align="center">
+                                Number Of Items
+                            </th>
+                            <th valign="middle" align="center">
+                                Expected Average Unit Consumed /Day
+                            </th>
+                        </tr>
+                        </tbody><tbody>
+                        </tbody>
+                        <tbody class="collapse" style="display: table-row-group;">
+                        <?php
+                        if(isset($_POST['submit'])) {
+                        $itemByWatt = 0;
+                            for ($x = 0; $x <= count($_POST['name'])-1; $x++) {
+                                /**
+                                * multiply the wattage by the application unit for each
+                                * then multiply by the number of hours the appliance was on
+                                */
+                                $name = $_POST['name'][$x];
+                                $query = "SELECT * FROM appliances WHERE id = '$name'";
+                                $app = mysqli_fetch_assoc(mysqli_query($conn, $query));
+
+                                $itemByWatt = $itemByWatt + (($_POST['unit'][$x] * $app['max_watt']) * $_POST['usage'][$x]);
+                                ?>
+                        <tr>
+                            <td>
+                                <?=$app['name']?>
+                            </td>
+                            <td>
+                                <?=$app['max_watt']?>
+                            </td>
+                            <td valign="middle" align="center">
+                                <input type="number" value="<?=$_POST['usage'][$x]?>" disabled>
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td valign="middle" align="center">
+                                <input type="number" value="<?=$_POST['unit'][$x]?>" disabled>
+                            </td>
+                            <td valign="middle" align="center">
+                                <label id="ExpectedAverageUnits1"></label>
+                            </td>
+                        </tr>
+                                <?php
+                            }
+
+                        /**
+                        * go ahead to multiply the itemByWatt by 30 to het the monthly consumption
+                        */
+                        $monthlyConsumption = $itemByWatt * 30;
+
+                        /**
+                        * get the unit price and vat
+                        */
+
+                        $query = "SELECT * FROM company_policy WHERE `status`=1";
+                        $run_query = mysqli_query($conn, $query);
+                            if($data=mysqli_fetch_array($run_query))
+                        {
+                        $vat = $data['vat'];
+                        $totalCost = $monthlyConsumption * $_SESSION['tariff'];
+
+                        }
+                        }
+                        ?>
+
+                        </tbody>
+
+                        <tbody><tr style="border:1px #000 solid;height:30px;">
+                            <td colspan="5" align="right" valign="middle" style="margin-right:5px;">
+                                <b>Total Average Unit consumed per day</b>
+                            </td>
+                            <td valign="middle" align="center">
+                                <label id="TotalAverageUnits"> <?=$monthlyConsumption?> </label>
+                            </td>
+                        </tr>
+                        <tr style="border:1px #000 solid; height:30px;">
+                            <td colspan="5" align="right" valign="middle" style="padding-right:5px;" height="100%">
+                                <b>Number of days availability</b>
+                            </td>
+                            <td valign="middle" align="center">
+                                <input type="number" id="NoOfDays" value="30" disabled>
+                            </td>
+                        </tr>
+                        <tr style="border:1px #000 solid;height:30px;">
+                            <td colspan="5" align="right" valign="middle" style="margin-right:5px;">
+                                <b>Estimated Units Consumed in the month-period</b>
+                            </td>
+                            <td valign="middle" align="center">
+                                <label id="UnitConsumedInMonth"> <?=$monthlyConsumption?> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Tariff</b>
+                            </td>
+
+                            <td>
+                                <select id="Tariff" disabled>
+                                    <option value="">N<?=$_SESSION['tariff']?></option>
+                                </select>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td align="right"><b>Applicable rate</b></td>
+                            <td valign="middle" align="center">
+                                <label id="ApplicableRate"><?=$_SESSION['tariff']?></label>
+                            </td>
+                        </tr>
+                        <tr style="border:2px #000 solid;height:30px;">
+                            <td colspan="5" align="right" valign="middle" style="margin-right:5px;">
+                                <b>ESTIMATED BILLED AMOUNT</b>
+                            </td>
+                            <td valign="middle" align="center" style="font-weight:bold;">
+                                <label id="BilledAmount">N<?=$totalCost?></label>
+                            </td>
+                        </tr>
+                        </tbody></table>
+                </section>
             </div>
         </div>
     </div>
