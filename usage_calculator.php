@@ -10,7 +10,11 @@ if(isset($_POST['submit'])) {
          * multiply the wattage by the application unit for each
          * then multiply by the number of hours the appliance was on
          */
-        $itemByWatt = $itemByWatt + (($_POST['unit'][$x] * $_POST['watt'][$x]) * $_POST['usage'][$x]);
+        $name = $_POST['name'][$x];
+        $query = "SELECT * FROM appliances WHERE id = '$name'";
+        $app = mysqli_fetch_assoc(mysqli_query($conn, $query));
+
+        $itemByWatt = $itemByWatt + (($_POST['unit'][$x] * $app['max_watt']) * $_POST['usage'][$x]);
     }
 
     /**
@@ -97,20 +101,27 @@ if (isset($_GET['tariff']))
         <div class="card">
             <h5 class="card-header">Fill the form below to register your complaints</h5>
             <div class="card-body">
-                <form id="" method="POST" action="">
+                <form id="" method="POST" action="calculated.php">
                     <div id="addition">
                         <div id="added-row">
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
                                         <label class="text-sm-right">Name</label>
-                                        <input type="text"  maxlength="40" placeholder="Enter appliance name" class="form-control" name="name[]" required="" >
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label class="text-sm-right">Watt</label>
-                                        <input type="number" placeholder="enter the wattage" class="form-control" name="watt[]" required="" >
+                                        <select name="name[]" id="watt_name" class="form-control" required>
+                                            <option value="">--select appliance name--</option>
+                                            <?php
+                                            $query = "SELECT * FROM appliances";
+                                            $app = mysqli_query($conn, $query);
+                                            while ($a = mysqli_fetch_assoc($app)):
+                                            ?>
+                                            <option value="<?=$a['id']?>" data-watt="<?=$a['max_watt']?>">
+                                                <?=$a['name']?> || <?=$a['max_watt']?>watt
+                                            </option>
+                                            <?php
+                                            endwhile;
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -221,20 +232,29 @@ if (isset($_GET['tariff']))
     <script>
         $(function(){
             $("#add-new").click(function(){
+                var add = ""
+                <?php
+                $query = "SELECT * FROM appliances";
+                $app = mysqli_query($conn, $query);
+                while ($a = mysqli_fetch_assoc($app)):
+                ?>
+                var add = add + "<option value=\"<?=$a['id']?>\" data-watt=\"<?=$a['max_watt']?>\">\n" +
+                    "                    <?=$a['name']?> || <?=$a['max_watt']?>watt\n" +
+                    "                    </option>"
+                <?php
+                endwhile;
+                ?>
+                var add = add + "</select>\n" +
+                    "                    </div>\n" +
+                    "                    </div>"
+
                 var html = "<div id=\"added-row\">\n" +
-                    "                            <div class=\"row\">\n" +
-                    "                                <div class=\"col\">\n" +
-                    "                                    <div class=\"form-group\">\n" +
-                    "                                        <label class=\"text-sm-right\">Name</label>\n" +
-                    "                                        <input type=\"text\"  maxlength=\"40\" placeholder=\"Enter appliance name\" class=\"form-control\" name=\"name[]\" required=\"\" >\n" +
-                    "                                    </div>\n" +
-                    "                                </div>\n" +
-                    "                                <div class=\"col\">\n" +
-                    "                                    <div class=\"form-group\">\n" +
-                    "                                        <label class=\"text-sm-right\">Watt</label>\n" +
-                    "                                        <input type=\"number\" placeholder=\"enter the wattage\" class=\"form-control\" name=\"watt[]\" required=\"\" >\n" +
-                    "                                    </div>\n" +
-                    "                                </div>\n" +
+                        "<div class='row'>\n"+
+                    "                            <div class=\"col\">\n" +
+                    "                    <div class=\"form-group\">\n" +
+                    "                    <label class=\"text-sm-right\">Name</label>\n" +
+                    "                    <select name=\"name[]\" id=\"watt_name\" class=\"form-control\" required>\n" +
+                    "                <option value=\"\">--select appliance name--</option>" + add +
                     "                                <div class=\"col\">\n" +
                     "                                    <div class=\"form-group\">\n" +
                     "                                        <label class=\"text-sm-right\">Usage (hour)</label>\n" +
@@ -251,6 +271,7 @@ if (isset($_GET['tariff']))
                     "                            </div>\n" +
                     "                            <hr>\n" +
                     "                        </div>"
+                +"</div>"
                 $("#addition").append(html)
             })
 
