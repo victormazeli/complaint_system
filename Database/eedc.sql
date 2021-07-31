@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 17, 2021 at 11:20 PM
+-- Generation Time: Jul 31, 2021 at 04:18 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.4.9
 
@@ -20,6 +20,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `eedc`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `appliances`
+--
+
+DROP TABLE IF EXISTS `appliances`;
+CREATE TABLE IF NOT EXISTS `appliances` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `min_watt` varchar(10) DEFAULT NULL,
+  `max_watt` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `appliances`
+--
+
+INSERT INTO `appliances` (`id`, `name`, `min_watt`, `max_watt`) VALUES
+(1, '1 Ton Air Conditioner', NULL, '1000'),
+(2, '1 Ton Inverter Air Conditoner', NULL, '1000'),
+(3, '1.5 Ton Air Conditioner	', NULL, '1500'),
+(4, '1.5 Ton Inverter Air Conditioner', NULL, '1500');
 
 -- --------------------------------------------------------
 
@@ -131,6 +156,7 @@ CREATE TABLE IF NOT EXISTS `complaint` (
   `complaint_details` varchar(255) NOT NULL,
   `location` varchar(20) NOT NULL,
   `complaint_file` varchar(255) DEFAULT NULL,
+  `center_id` int(11) DEFAULT NULL,
   `status` varchar(8) NOT NULL,
   `date_reg` datetime DEFAULT NULL,
   `date_modified` datetime DEFAULT NULL,
@@ -142,14 +168,14 @@ CREATE TABLE IF NOT EXISTS `complaint` (
 -- Dumping data for table `complaint`
 --
 
-INSERT INTO `complaint` (`complaint_id`, `complainant_id`, `complaint_title`, `complaint_details`, `location`, `complaint_file`, `status`, `date_reg`, `date_modified`) VALUES
-(1, 1, 'Faulty Transformer', 'Our Transformer develop fault ', 'Bosso', '', '1', '2019-11-13 09:45:59', '2019-11-13 09:48:02'),
-(2, 1, 'Low Voltage ', 'We have been experiencing low voltage for a while now', 'Bosso', '', '2', '2019-11-13 09:52:14', '2019-11-15 05:03:24'),
-(3, 1, 'Electric Shock', 'Ever since the new transformer was installed, We have been experiencing electric shock probably due to improper grounding', 'Bosso', '', '2', '2019-11-13 09:53:57', '2019-11-13 09:55:20'),
-(4, 2, 'Fallen Pool', 'Due to the heavy down pour yesterday, two poles fell down', 'Chanchaga', '', '0', '2019-11-14 12:13:23', '0000-00-00 00:00:00'),
-(5, 1, 'Fallen Pole', 'Three Pole fell down last night', 'Bosso', '', '0', '2019-11-14 12:16:06', '0000-00-00 00:00:00'),
-(6, 1, 'Wrong connection', 'There is a wrong connection in my house', 'Bosso', 'CHAPTER TWO edit.docx', '0', '2019-11-14 03:22:41', '0000-00-00 00:00:00'),
-(7, 1, 'Fallen pole', 'Three poles fell', 'Bosso', 'IRJET-V4I4143.pdf', '0', '2019-11-14 03:26:46', '0000-00-00 00:00:00');
+INSERT INTO `complaint` (`complaint_id`, `complainant_id`, `complaint_title`, `complaint_details`, `location`, `complaint_file`, `center_id`, `status`, `date_reg`, `date_modified`) VALUES
+(1, 1, 'Faulty Transformer', 'Our Transformer develop fault ', 'Bosso', '', 1, '1', '2019-11-13 09:45:59', '2019-11-13 09:48:02'),
+(2, 1, 'Low Voltage ', 'We have been experiencing low voltage for a while now', 'Bosso', '', 0, '2', '2019-11-13 09:52:14', '2019-11-15 05:03:24'),
+(3, 1, 'Electric Shock', 'Ever since the new transformer was installed, We have been experiencing electric shock probably due to improper grounding', 'Bosso', '', 0, '2', '2019-11-13 09:53:57', '2019-11-13 09:55:20'),
+(4, 2, 'Fallen Pool', 'Due to the heavy down pour yesterday, two poles fell down', 'Chanchaga', '', 3, '1', '2019-11-14 12:13:23', '0000-00-00 00:00:00'),
+(5, 1, 'Fallen Pole', 'Three Pole fell down last night', 'Bosso', '', 3, '1', '2019-11-14 12:16:06', '0000-00-00 00:00:00'),
+(6, 1, 'Wrong connection', 'There is a wrong connection in my house', 'Bosso', 'CHAPTER TWO edit.docx', 3, '2', '2019-11-14 03:22:41', '0000-00-00 00:00:00'),
+(7, 1, 'Fallen pole', 'Three poles fell', 'Bosso', 'IRJET-V4I4143.pdf', 0, '2', '2019-11-14 03:26:46', '2021-07-30 01:06:41');
 
 -- --------------------------------------------------------
 
@@ -455,7 +481,6 @@ CREATE TABLE IF NOT EXISTS `tariff` (
 --
 
 INSERT INTO `tariff` (`id`, `name`, `rate`, `vat`, `status`) VALUES
-(1, 'R1', '4', 10, 1),
 (2, 'R2s', '21', 10, 1),
 (3, 'R2T', '23', 10, 1),
 (4, 'R4', '32', 10, 1),
