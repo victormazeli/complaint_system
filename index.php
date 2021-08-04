@@ -83,7 +83,7 @@ exit();
     <!-- login page  -->
     <!-- ============================================================== -->
     <div class="splash-container">
-          <div><center><h1 style="color: white; font-size: 50px" >PCMMIS</h1></center></div> <br>
+          <div><center><h1 style="color: white; font-size: 50px" >ECUS</h1></center></div> <br>
         <h2 style="text-align:center; color: white; background-color: #5969ff;">COMPLAIANANT <br> LOGIN PAGE</h2>
         <div class="card ">
             <div class="card-header text-center">

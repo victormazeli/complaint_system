@@ -59,7 +59,7 @@
                  <div class="row">
                     <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header">
-                            <h2 class="pageheader-title"> PCMMIS Complaint History</h2>
+                            <h2 class="pageheader-title"> ECUS Complaint History</h2>
                             <div class="page-breadcrumb">
                                
                             </div>
