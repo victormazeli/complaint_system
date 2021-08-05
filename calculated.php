@@ -203,7 +203,7 @@ if (isset($_GET['tariff']))
                         {
                         $vat = $data['vat'];
                         $totalCost = $monthlyConsumption * $_SESSION['tariff'];
-                        $totalCost = $totalCost + ((10/100)*$totalCost);
+                        $totalCost = ((10/100)*$totalCost);
 
                         }
                         }
