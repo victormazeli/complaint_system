@@ -150,6 +150,7 @@ if (isset($_GET['tariff']))
                         <?php
                         if(isset($_POST['submit'])) {
                         $itemByWatt = 0;
+                        $exp = 0;
                             for ($x = 0; $x <= count($_POST['name'])-1; $x++) {
                                 /**
                                 * multiply the wattage by the application unit for each
@@ -178,7 +179,10 @@ if (isset($_GET['tariff']))
                                 <input type="number" value="<?=$_POST['unit'][$x]?>" disabled>
                             </td>
                             <td valign="middle" align="center">
-                                <label id="ExpectedAverageUnits1"></label>
+                                <?=$ep=(($app['max_watt']/1000)*$_POST['usage'][$x])*$_POST['unit'][$x]?>
+                                <?php
+                                $exp = $exp+ $ep;
+                                ?>
                             </td>
                         </tr>
                                 <?php
@@ -187,7 +191,7 @@ if (isset($_GET['tariff']))
                         /**
                         * go ahead to multiply the itemByWatt by 30 to het the monthly consumption
                         */
-                        $monthlyConsumption = $itemByWatt * 30;
+                        $monthlyConsumption = $exp * 30;
 
                         /**
                         * get the unit price and vat
@@ -199,6 +203,7 @@ if (isset($_GET['tariff']))
                         {
                         $vat = $data['vat'];
                         $totalCost = $monthlyConsumption * $_SESSION['tariff'];
+                        $totalCost = $totalCost + ((10/100)*$totalCost);
 
                         }
                         }
@@ -211,7 +216,7 @@ if (isset($_GET['tariff']))
                                 <b>Total Average Unit consumed per day</b>
                             </td>
                             <td valign="middle" align="center">
-                                <label id="TotalAverageUnits"> <?=$monthlyConsumption?> </label>
+                                <label id="TotalAverageUnits"> <?=$exp?> </label>
                             </td>
                         </tr>
                         <tr style="border:1px #000 solid; height:30px;">
@@ -240,7 +245,9 @@ if (isset($_GET['tariff']))
                                     <option value="">N<?=$_SESSION['tariff']?></option>
                                 </select>
                             </td>
-                            <td></td>
+                            <td>
+                                VAT: 10%
+                            </td>
                             <td></td>
                             <td align="right"><b>Applicable rate</b></td>
                             <td valign="middle" align="center">
